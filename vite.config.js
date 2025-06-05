@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [TanStackRouterVite({ autoCodeSplitting: true }), viteReact()],
-  base: '/QRcode-creator.orosemo.de/',
+  base: "/",
   test: {
     globals: true,
     environment: "jsdom",
