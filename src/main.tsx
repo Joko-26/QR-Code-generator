@@ -16,6 +16,7 @@ const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
+  basepath: "/QRcode-creator.orosemo.de",
 })
 
 // Register the router instance for type safety

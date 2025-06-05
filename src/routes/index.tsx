@@ -1,5 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import logo from "../logo.svg";
+import { createFileRoute } from "@tanstack/react-router"
 import "../App.css";
 import { QRCodeSVG } from "qrcode.react";
 import { useState, useRef } from "react";
@@ -15,7 +14,6 @@ function App() {
   const [color, setColor] = useState<string>("#000000");
   const [size, setSize] = useState<number>(128);
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [centerImg, setCenterImg] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
@@ -105,9 +103,10 @@ function App() {
               onClick={() => setCenterImg(null)}>delete image</button>
           </div>
         </div>
-        <button className="download_button" onClick={handleDownload}>
-          download QR-Code
-        </button>
+
+          <button className="download_button" onClick={handleDownload}>
+            download QR-Code
+          </button>
       </div>
 
       <div className="QR-code">

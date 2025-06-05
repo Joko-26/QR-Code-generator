@@ -1,5 +1,6 @@
 {
   "name": "qrCode-generator",
+  "homepage": "https://QRcode-creator.orosemo.de/",
   "private": true,
   "type": "module",
   "scripts": {
@@ -7,7 +8,9 @@
     "start": "vite --port 3000",
     "build": "vite build && tsc",
     "serve": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.114.3",
@@ -24,6 +27,7 @@
     "@testing-library/react": "^16.2.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
+    "@types/react-helmet": "^6.1.11",
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^26.0.0",
     "typescript": "^5.7.2",

@@ -82,7 +82,7 @@ input[type="file"]::file-selector-button {
 }
 
 .download_button {
-  padding: 40px;
+  padding: 10px;
 }
 
 .QR-code {
