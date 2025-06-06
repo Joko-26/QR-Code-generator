@@ -149,6 +149,7 @@ function App() {
           bgColor={bgcolor}
           fgColor={color}
           size={size}
+          level="H"
           imageSettings={
             centerImg
               ? {
