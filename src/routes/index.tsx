@@ -68,100 +68,111 @@ function App() {
   };
 
   return (
-    <div className="App">
-      {/* site meta data */}
-      <Helmet>
-        <title>QR-Code Generator</title>
-        <meta name="description" content="Erstelle kostenlos QR-Codes mit eigenem Logo und Farben." />
-      </Helmet>
-      {/*Headline*/}
-      <h1>Create your QR-Codes for free</h1>
-      {/* container or all inputs and buttons*/}
-      <div className="form_container">
-        <div>
-          {/* URL input field*/}
-          <input
-            type="text"
-            placeholder="URL"
-            value={qrurl}
-            onChange={(e) => setqrUrl(e.target.value)}
-          />
-
-          {/* QR-Code color input*/}
-          <div className="input_type_container">
-            <p>QR-Code color</p>
+    <div>
+      <div className="App">
+        {/* site meta data */}
+        <Helmet>
+          <title>QR-Code Generator</title>
+          <meta name="description" content="Erstelle kostenlos QR-Codes mit eigenem Logo und Farben." />
+        </Helmet>
+        {/*Headline*/}
+        <h1>Create your QR-Codes for free</h1>
+        {/* container or all inputs and buttons*/}
+        <div className="form_container">
+          <div>
+            {/* URL input field*/}
             <input
-              type="color"
-              name=""
-              value={color}
-              id=""
-              onChange={(e) => setColor(e.target.value)}
+              type="text"
+              placeholder="URL"
+              value={qrurl}
+              onChange={(e) => setqrUrl(e.target.value)}
             />
+
+            {/* QR-Code color input*/}
+            <div className="input_type_container">
+              <p>QR-Code color</p>
+              <input
+                type="color"
+                name=""
+                value={color}
+                id=""
+                onChange={(e) => setColor(e.target.value)}
+              />
+            </div>
+
+            {/* Background color input*/}
+            <div className="input_type_container">
+              <p>Background color</p>
+              <input
+                type="color"
+                value={bgcolor}
+                name=""
+                id=""
+                onChange={(e) => setBgcolor(e.target.value)}
+              />
+            </div>
+
+            {/* QR-Code size selection*/}
+            <div className="input_type_container">
+              <p>Size</p>
+              <select
+                value={size}
+                onChange={(e) => setSize(Number(e.target.value))}
+              >
+                <option value={64}>64 px</option>
+                <option value={128}>128 px</option>
+                <option value={256}>256 px</option>
+                <option value={348}>348 px</option>
+                <option value={512}>512 px</option>
+              </select>
+            </div>
+
+            {/* Center image upload input*/}
+            <div className="input_type_container">
+              <p>Center Image</p>
+              <input type="file" accept="image/*" onChange={handleImageUpload} />
+              <button
+                onClick={() => setCenterImg(null)}>delete image</button>
+            </div>
           </div>
 
-          {/* Background color input*/}
-          <div className="input_type_container">
-            <p>Background color</p>
-            <input
-              type="color"
-              value={bgcolor}
-              name=""
-              id=""
-              onChange={(e) => setBgcolor(e.target.value)}
-            />
-          </div>
-
-          {/* QR-Code size selection*/}
-          <div className="input_type_container">
-            <p>Size</p>
-            <select
-              value={size}
-              onChange={(e) => setSize(Number(e.target.value))}
-            >
-              <option value={64}>64 px</option>
-              <option value={128}>128 px</option>
-              <option value={256}>256 px</option>
-              <option value={348}>348 px</option>
-              <option value={512}>512 px</option>
-            </select>
-          </div>
-
-          {/* Center image upload input*/}
-          <div className="input_type_container">
-            <p>Center Image</p>
-            <input type="file" accept="image/*" onChange={handleImageUpload} />
-            <button
-              onClick={() => setCenterImg(null)}>delete image</button>
-          </div>
+            {/* QR-Code Download button*/}
+            <button className="download_button" onClick={handleDownload}>
+              download QR-Code
+            </button>
         </div>
 
-          {/* QR-Code Download button*/}
-          <button className="download_button" onClick={handleDownload}>
-            download QR-Code
-          </button>
+        {/*QR-Code*/}
+        <div className="QR-code">
+          <QRCodeSVG
+            ref={svgRef}
+            value={qrurl}
+            bgColor={bgcolor}
+            fgColor={color}
+            size={size}
+            level="H"
+            imageSettings={
+              centerImg
+                ? {
+                    src: centerImg,
+                    height: size * 0.3,
+                    width: size * 0.3,
+                    excavate: true,
+                  }
+                : undefined
+            }
+          />
+        </div>
       </div>
+      <div className="see-more-container">
+        <h3>If you liked this tool and want to see more:</h3>
+        <div>
+          <a className="play-button"  href="https://orosemo.de/">My Website</a>
+          <a className="play-button" href="https://github.com/Joko-26">My Github</a>
+        </div>
 
-      {/*QR-Code*/}
-      <div className="QR-code">
-        <QRCodeSVG
-          ref={svgRef}
-          value={qrurl}
-          bgColor={bgcolor}
-          fgColor={color}
-          size={size}
-          level="H"
-          imageSettings={
-            centerImg
-              ? {
-                  src: centerImg,
-                  height: size * 0.3,
-                  width: size * 0.3,
-                  excavate: true,
-                }
-              : undefined
-          }
-        />
       </div>
     </div>
+
   );
 }
