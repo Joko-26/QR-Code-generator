@@ -14,6 +14,7 @@ function App() {
   const [bgcolor, setBgcolor] = useState<string>("#ffffff");
   const [color, setColor] = useState<string>("#000000");
   const [size, setSize] = useState<number>(128);
+  const [bgTransparent, setBgTransparent] = useState<boolean>(false)
 
   const [centerImg, setCenterImg] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -35,8 +36,21 @@ function App() {
     reader.readAsDataURL(file);
   };
 
-  // function tha handles the QR-Code download (gets called by the download QR-Code button)
-  const handleDownload = () => {
+  // function that makes the background transparent according to the input
+  const transparentBG = (checked:boolean) => {
+    // if checked is true make the background transparent
+    if (checked) {
+      setBgcolor("#00000000")
+      setBgTransparent(true)
+      // if not make it white
+    } else {
+      setBgcolor("#FFFFFF")
+      setBgTransparent(false)
+    }
+  }
+
+  // function tha handles the QR-Code download as SVG (gets called by the download QR-Code SVG button)
+  const handleDownloadSVG = () => {
     // gets the image
     const svg = svgRef.current;
     // checks if there is an QR-code to download if not the function stops
@@ -52,19 +66,67 @@ function App() {
     // creates an temporary url for the blob
     const url = URL.createObjectURL(blob);
 
-    // creates the link element and sets its parameters
+    // creates an invisible link element and sets its parameters
     const link = document.createElement("a");
     link.href = url;
     link.download = "qrcode.svg";
 
-    // appends the invisible link element
+    // adds the link to the page
     document.body.appendChild(link);
     // simulates an click on the link 
     link.click();
-    // kills the child (link)
+    // deletes the link from the page
     document.body.removeChild(link);
     // kills the URL
     URL.revokeObjectURL(url);
+  };
+
+  // function tha handles the QR-Code download as PNG (gets called by the download QR-Code PNG button)
+  const handleDownloadPNG = () => {
+    // gets the image
+    const svg = svgRef.current;
+    // checks if there is an QR-code to download if not the function stops
+    if (!svg) return;
+    
+    // creates an temporary url for the image:
+    // creates an XMLSerializer to transform the image to an string 
+    const serializer = new XMLSerializer();
+    // transforms the image to an SVG-XML-Element
+    const source = serializer.serializeToString(svg);
+
+    // encrypts the SVG-XML-Element into Base64
+    const svg64 = btoa(unescape(encodeURIComponent(source)));
+    // creates an data url from the Base64 element
+    const image64 = 'data:image/svg+xml;base64,' + svg64;
+    
+    // creates an new image element (img)
+    const img = new window.Image();
+    // when the image finished loading it executes following code
+    img.onload = function () {
+      // creates an new canvas element with the selected size
+      const canvas = document.createElement('canvas');
+      canvas.width = svg.width.baseVal.value || size;
+      canvas.height = svg.height.baseVal.value || size;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      // sets the background to the selected color
+      ctx.fillStyle = bgcolor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // converts the canvas element into an invisible png link
+      const pngUrl = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = pngUrl;
+      link.download = 'qrcode.png';
+      // adds the link to the page
+      document.body.appendChild(link);
+      // simulates an click on the link
+      link.click();
+      // deletes the link from the page
+      document.body.removeChild(link);
+    };
+    img.src = image64;
   };
 
   return (
@@ -110,6 +172,9 @@ function App() {
                 id=""
                 onChange={(e) => setBgcolor(e.target.value)}
               />
+              {/* option to make the background transparent*/}
+              <p>Transparent background:</p>
+              <input className="checkbox" type="checkbox" name="bg-transparent" id="" checked={bgTransparent} onChange={(e) => transparentBG(e.target.checked)} />
             </div>
 
             {/* QR-Code size selection*/}
@@ -137,8 +202,11 @@ function App() {
           </div>
 
             {/* QR-Code Download button*/}
-            <button className="download_button" onClick={handleDownload}>
-              download QR-Code
+            <button className="download_button" onClick={handleDownloadSVG}>
+              download QR-Code as SVG
+            </button>
+            <button className="download_button" onClick={handleDownloadPNG}>
+              download QR-Code as PNG
             </button>
         </div>
 
