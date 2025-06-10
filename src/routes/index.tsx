@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
 import "../App.css";
 import { QRCodeSVG } from "qrcode.react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Helmet  from 'react-helmet';
 
 export const Route = createFileRoute("/")({
@@ -15,9 +15,20 @@ function App() {
   const [color, setColor] = useState<string>("#000000");
   const [size, setSize] = useState<number>(128);
   const [bgTransparent, setBgTransparent] = useState<boolean>(false)
+  const [errorCorrection, setErrorCorrection] = useState<'L' | 'M' | 'Q' | 'H'>('L');
+
 
   const [centerImg, setCenterImg] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+
+  useEffect(() => {
+    if (centerImg) {
+      setErrorCorrection("H");
+    } else {
+      setErrorCorrection("L");
+    }
+  }, [centerImg]);
+
 
   // function tha handles the image upload (gets called from the center image input)
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +45,8 @@ function App() {
     };
     // starts the reading of the file 
     reader.readAsDataURL(file);
+
+    
   };
 
   // function that makes the background transparent according to the input
@@ -48,6 +61,7 @@ function App() {
       setBgTransparent(false)
     }
   }
+
 
   // function tha handles the QR-Code download as SVG (gets called by the download QR-Code SVG button)
   const handleDownloadSVG = () => {
@@ -195,7 +209,7 @@ function App() {
             {/* Center image upload input*/}
             <div className="input_type_container">
               <p>Center Image</p>
-              <input type="file" accept="image/*" onChange={handleImageUpload} />
+              <input type="file" accept="image/*" onChange={e => {handleImageUpload(e)}} />
               <button
                 onClick={() => setCenterImg(null)}>delete image</button>
             </div>
@@ -218,7 +232,7 @@ function App() {
             bgColor={bgcolor}
             fgColor={color}
             size={size}
-            level="H"
+            level={errorCorrection}
             imageSettings={
               centerImg
                 ? {

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --port 3000",
     "start": "vite --port 3000",
-    "build": "vite build && tsc",
+    "build": "vite build && tsc && node generate-sitemap.js",
     "serve": "vite preview",
     "test": "vitest run",
     "predeploy": "npm run build",
@@ -21,7 +21,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-helmet": "^6.1.0",
-    "react-helmet-async": "^2.0.5"
+    "react-helmet-async": "^2.0.5",
+    "sitemap": "^8.0.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
